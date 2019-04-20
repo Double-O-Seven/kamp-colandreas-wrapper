@@ -1,0 +1,271 @@
+// Constants
+
+const int FCNPC_ENTITY_CHECK_NONE = 0;
+const int FCNPC_ENTITY_CHECK_PLAYER = 1;
+const int FCNPC_ENTITY_CHECK_NPC = 2;
+const int FCNPC_ENTITY_CHECK_ACTOR = 4;
+const int FCNPC_ENTITY_CHECK_VEHICLE = 8;
+const int FCNPC_ENTITY_CHECK_OBJECT = 16;
+const int FCNPC_ENTITY_CHECK_POBJECT_ORIG = 32;
+const int FCNPC_ENTITY_CHECK_POBJECT_TARG = 64;
+const int FCNPC_ENTITY_CHECK_MAP = 128;
+const int FCNPC_ENTITY_CHECK_ALL = 255;
+
+const int FCNPC_MOVE_TYPE_AUTO = -1;
+const int FCNPC_MOVE_TYPE_WALK = 0;
+const int FCNPC_MOVE_TYPE_RUN = 1;
+const int FCNPC_MOVE_TYPE_SPRINT = 2;
+const int FCNPC_MOVE_TYPE_DRIVE = 3;
+
+const int FCNPC_MOVE_MODE_AUTO = -1;
+const int FCNPC_MOVE_MODE_NONE = 0;
+const int FCNPC_MOVE_MODE_MAPANDREAS = 1;
+const int FCNPC_MOVE_MODE_COLANDREAS = 2;
+
+const int FCNPC_MOVE_PATHFINDING_AUTO = -1;
+const int FCNPC_MOVE_PATHFINDING_NONE = 0;
+const int FCNPC_MOVE_PATHFINDING_Z = 1;
+const int FCNPC_MOVE_PATHFINDING_RAYCAST = 2;
+
+const float FCNPC_MOVE_SPEED_AUTO = -1.0;
+const float FCNPC_MOVE_SPEED_WALK = 0.1552086;
+const float FCNPC_MOVE_SPEED_RUN = 0.56444;
+const float FCNPC_MOVE_SPEED_SPRINT = 0.926784;
+
+const int FCNPC_MAX_NODES = 64;
+
+const int FCNPC_INVALID_MOVEPATH_ID = -1;
+const int FCNPC_INVALID_RECORD_ID = -1;
+
+// Callbacks
+
+[callback] void FCNPC_OnCreate(int npcid);
+[callback] void FCNPC_OnDestroy(int npcid);
+[callback] void FCNPC_OnSpawn(int npcid);
+[callback] void FCNPC_OnRespawn(int npcid);
+[callback] void FCNPC_OnDeath(int npcid, int killerid, int reason);
+[callback] bool FCNPC_OnUpdate(int npcid);
+
+[callback] bool FCNPC_OnTakeDamage(int npcid, int issuerid, float amount, int weaponid, int bodypart);
+[callback] void FCNPC_OnGiveDamage(int npcid, int damagedid, float amount, int weaponid, int bodypart);
+
+[callback] void FCNPC_OnReachDestination(int npcid);
+
+[callback] bool FCNPC_OnWeaponShot(int npcid, int weaponid, int hittype, int hitid, float fX, float fY, float fZ);
+[callback] void FCNPC_OnWeaponStateChange(int npcid, int weapon_state);
+
+[callback] bool FCNPC_OnStreamIn(int npcid, int forplayerid);
+[callback] bool FCNPC_OnStreamOut(int npcid, int forplayerid);
+
+[callback] void FCNPC_OnVehicleEntryComplete(int npcid, int vehicleid, int seatid);
+[callback] void FCNPC_OnVehicleExitComplete(int npcid, int vehicleid);
+[callback] bool FCNPC_OnVehicleTakeDamage(int npcid, int issuerid, int vehicleid, float amount, int weaponid, float fX, float fY, float fZ);
+
+[callback] void FCNPC_OnFinishPlayback(int npcid);
+
+[callback] void FCNPC_OnFinishNode(int npcid, int nodeid);
+[callback] bool FCNPC_OnFinishNodePoint(int npcid, int nodeid, int pointid);
+[callback] bool FCNPC_OnChangeNode(int npcid, int newnodeid, int oldnodeid);
+
+[callback] void FCNPC_OnFinishMovePath(int npcid, int pathid);
+[callback] bool FCNPC_OnFinishMovePathPoint(int npcid, int pathid, int pointid);
+
+[callback] void FCNPC_OnChangeHeightPos(int npcid, float newz, float oldz);
+
+[native] bool FCNPC_GetPluginVersion([out] string version, int size);
+[native] bool FCNPC_SetUpdateRate(int rate);
+[native] int FCNPC_GetUpdateRate();
+[native] bool FCNPC_SetTickRate(int rate);
+[native] int FCNPC_GetTickRate();
+[native] bool FCNPC_UseMoveMode(int mode, bool use = true);
+[native] bool FCNPC_IsMoveModeUsed(int mode);
+[native] bool FCNPC_UseMovePathfinding(int pathfinding, bool use = true);
+[native] bool FCNPC_IsMovePathfindingUsed(int pathfinding);
+[native] bool FCNPC_UseCrashLog(bool use = true);
+[native] bool FCNPC_IsCrashLogUsed();
+
+[native] int FCNPC_Create(string name);
+[native] bool FCNPC_Destroy(int npcid);
+[native] bool FCNPC_Spawn(int npcid, int skinid, float x, float y, float z);
+[native] bool FCNPC_Respawn(int npcid);
+[native] bool FCNPC_IsSpawned(int npcid);
+[native] bool FCNPC_Kill(int npcid);
+
+[native] bool FCNPC_IsDead(int npcid);
+[native] bool FCNPC_IsValid(int npcid);
+[native] bool FCNPC_IsStreamedIn(int npcid, int forplayerid);
+[native] bool FCNPC_IsStreamedInForAnyone(int npcid);
+
+[native] bool FCNPC_SetPosition(int npcid, float x, float y, float z);
+[native] bool FCNPC_GivePosition(int npcid, float x, float y, float z);
+[native] bool FCNPC_GetPosition(int npcid, [out] float x, [out] float y, [out] float z);
+[native] bool FCNPC_SetAngle(int npcid, float angle);
+[native] float FCNPC_GiveAngle(int npcid, float angle);
+[native] bool FCNPC_SetAngleToPos(int npcid, float x, float y);
+[native] bool FCNPC_SetAngleToPlayer(int npcid, int playerid);
+[native] float FCNPC_GetAngle(int npcid);
+[native] bool FCNPC_SetQuaternion(int npcid, float w, float x, float y, float z);
+[native] bool FCNPC_GiveQuaternion(int npcid, float w, float x, float y, float z);
+[native] bool FCNPC_GetQuaternion(int npcid, [out] float w, [out] float x, [out] float y, [out] float z);
+[native] bool FCNPC_SetVelocity(int npcid, float x, float y, float z, bool update_pos = false);
+[native] bool FCNPC_GiveVelocity(int npcid, float x, float y, float z, bool update_pos = false);
+[native] bool FCNPC_GetVelocity(int npcid, [out] float x, [out] float y, [out] float z);
+[native] bool FCNPC_SetSpeed(int npcid, float speed);
+[native] float FCNPC_GetSpeed(int npcid);
+[native] bool FCNPC_SetInterior(int npcid, int interiorid);
+[native] int FCNPC_GetInterior(int npcid);
+[native] bool FCNPC_SetVirtualWorld(int npcid, int worldid);
+[native] int FCNPC_GetVirtualWorld(int npcid);
+
+[native] bool FCNPC_SetHealth(int npcid, float health);
+[native] float FCNPC_GiveHealth(int npcid, float health);
+[native] float FCNPC_GetHealth(int npcid);
+[native] bool FCNPC_SetArmour(int npcid, float armour);
+[native] float FCNPC_GiveArmour(int npcid, float armour);
+[native] float FCNPC_GetArmour(int npcid);
+
+[native] bool FCNPC_SetInvulnerable(int npcid, bool invulnerable = true);
+[native] bool FCNPC_IsInvulnerable(int npcid);
+
+[native] bool FCNPC_SetSkin(int npcid, int skinid);
+[native] int FCNPC_GetSkin(int npcid);
+
+[native] bool FCNPC_SetWeapon(int npcid, int weaponid);
+[native] int FCNPC_GetWeapon(int npcid);
+[native] bool FCNPC_SetAmmo(int npcid, int ammo);
+[native] bool FCNPC_GiveAmmo(int npcid, int ammo);
+[native] int FCNPC_GetAmmo(int npcid);
+[native] bool FCNPC_SetAmmoInClip(int npcid, int ammo);
+[native] bool FCNPC_GiveAmmoInClip(int npcid, int ammo);
+[native] int FCNPC_GetAmmoInClip(int npcid);
+[native] bool FCNPC_SetWeaponSkillLevel(int npcid, int skill, int level);
+[native] bool FCNPC_GiveWeaponSkillLevel(int npcid, int skill, int level);
+[native] int FCNPC_GetWeaponSkillLevel(int npcid, int skill);
+[native] bool FCNPC_SetWeaponState(int npcid, int weaponstate);
+[native] int FCNPC_GetWeaponState(int npcid);
+
+[native] bool FCNPC_SetWeaponReloadTime(int npcid, int weaponid, int time);
+[native] int FCNPC_GetWeaponReloadTime(int npcid, int weaponid);
+[native] int FCNPC_GetWeaponActualReloadTime(int npcid, int weaponid);
+[native] bool FCNPC_SetWeaponShootTime(int npcid, int weaponid, int time);
+[native] int FCNPC_GetWeaponShootTime(int npcid, int weaponid);
+[native] bool FCNPC_SetWeaponClipSize(int npcid, int weaponid, int size);
+[native] int FCNPC_GetWeaponClipSize(int npcid, int weaponid);
+[native] int FCNPC_GetWeaponActualClipSize(int npcid, int weaponid);
+[native] bool FCNPC_SetWeaponAccuracy(int npcid, int weaponid, float accuracy);
+[native] float FCNPC_GetWeaponAccuracy(int npcid, int weaponid);
+[native] bool FCNPC_SetWeaponInfo(int npcid, int weaponid, int reload_time = -1, int shoot_time = -1, int clip_size = -1, float accuracy = 1.0);
+[native] bool FCNPC_GetWeaponInfo(int npcid, int weaponid, [out] int reload_time = -1, [out] int shoot_time = -1, [out] int clip_size = -1, [out] float accuracy = 1.0);
+[native] bool FCNPC_SetWeaponDefaultInfo(int weaponid, int reload_time = -1, int shoot_time = -1, int clip_size = -1, float accuracy = 1.0);
+[native] bool FCNPC_GetWeaponDefaultInfo(int weaponid, [out] int reload_time = -1, [out] int shoot_time = -1, [out] int clip_size = -1, [out] float accuracy = 1.0);
+
+[native] bool FCNPC_SetKeys(int npcid, int ud_analog, int lr_analog, int keys);
+[native] bool FCNPC_GetKeys(int npcid, [out] int ud_analog, [out] int lr_analog, [out] int keys);
+
+[native] bool FCNPC_SetSpecialAction(int npcid, int actionid);
+[native] int FCNPC_GetSpecialAction(int npcid);
+
+[native] bool FCNPC_SetAnimation(int npcid, int animationid, float fDelta = 4.1, bool loop = false, bool lockx = true, bool locky = true, bool freeze = false, int time = 1);
+[native] bool FCNPC_SetAnimationByName(int npcid, string name, float fDelta = 4.1, bool loop = false, bool lockx = true, bool locky = true, bool freeze = false, int time = 1);
+[native] bool FCNPC_ResetAnimation(int npcid);
+[native] bool FCNPC_GetAnimation(int npcid, [out] int animationid = 0, [out] float fDelta = 4.1, [out] bool loop = false, [out] bool lockx = true, [out] bool locky = true, [out] bool freeze = false, [out] int time = 1);
+[native] bool FCNPC_ApplyAnimation(int npcid, string animlib, string animname, float fDelta = 4.1, bool loop = false, bool lockx = true, bool locky = true, bool freeze = false, int time = 1);
+[native] bool FCNPC_ClearAnimations(int npcid);
+
+[native] bool FCNPC_SetFightingStyle(int npcid, int style);
+[native] int FCNPC_GetFightingStyle(int npcid);
+
+[native] bool FCNPC_UseReloading(int npcid, bool use = true);
+[native] bool FCNPC_IsReloadingUsed(int npcid);
+[native] bool FCNPC_UseInfiniteAmmo(int npcid, bool use = true);
+[native] bool FCNPC_IsInfiniteAmmoUsed(int npcid);
+
+[native] bool FCNPC_GoTo(int npcid, float x, float y, float z, int type = FCNPC_MOVE_TYPE_AUTO, float speed = FCNPC_MOVE_SPEED_AUTO, int mode = FCNPC_MOVE_MODE_AUTO, int pathfinding = FCNPC_MOVE_PATHFINDING_AUTO, float radius = 0.0, bool set_angle = true, float min_distance = 0.0, int stopdelay = 250);
+[native] bool FCNPC_GoToPlayer(int npcid, int playerid, int type = FCNPC_MOVE_TYPE_AUTO, float speed = FCNPC_MOVE_SPEED_AUTO, int mode = FCNPC_MOVE_MODE_AUTO, int pathfinding = FCNPC_MOVE_PATHFINDING_AUTO, float radius = 0.0, bool set_angle = true, float min_distance = 0.0, float dist_check = 1.5, int stopdelay = 250);
+[native] bool FCNPC_Stop(int npcid);
+[native] bool FCNPC_IsMoving(int npcid);
+[native] bool FCNPC_IsMovingAtPlayer(int npcid, int playerid);
+[native] bool FCNPC_GetDestinationPoint(int npcid, [out] float x, [out] float y, [out] float z);
+
+[native] bool FCNPC_AimAt(int npcid, float x, float y, float z, bool shoot = false, int shoot_delay = -1, bool set_angle = true, float offset_from_x = 0.0, float offset_from_y = 0.0, float offset_from_z = 0.0, int between_check_flags = FCNPC_ENTITY_CHECK_ALL);
+[native] bool FCNPC_AimAtPlayer(int npcid, int playerid, bool shoot = false, int shoot_delay = -1, bool set_angle = true, float offset_x = 0.0, float offset_y = 0.0, float offset_z = 0.0, float offset_from_x = 0.0, float offset_from_y = 0.0, float offset_from_z = 0.0, int between_check_flags = FCNPC_ENTITY_CHECK_ALL);
+[native] bool FCNPC_StopAim(int npcid);
+[native] bool FCNPC_MeleeAttack(int npcid, int delay = -1, bool fightstyle = false);
+[native] bool FCNPC_StopAttack(int npcid);
+[native] bool FCNPC_IsAttacking(int npcid);
+[native] bool FCNPC_IsAiming(int npcid);
+[native] bool FCNPC_IsAimingAtPlayer(int npcid, int playerid);
+[native] int FCNPC_GetAimingPlayer(int npcid);
+[native] bool FCNPC_IsShooting(int npcid);
+[native] bool FCNPC_IsReloading(int npcid);
+[native] bool FCNPC_TriggerWeaponShot(int npcid, int weaponid, int hittype, int hitid, float x, float y, float z, bool is_hit = true, float offset_from_x = 0.0, float offset_from_y = 0.0, float offset_from_z = 0.0, int between_check_flags = FCNPC_ENTITY_CHECK_ALL);
+[native] bool FCNPC_GetClosestEntityInBetween(int npcid, float x, float y, float z, float range, int between_check_flags = FCNPC_ENTITY_CHECK_ALL, [out] int entity_id = -1, [out] int entity_type = -1, [out] int object_owner_id = 65535, [out] float point_x = 0.0, [out] float point_y = 0.0, [out] float point_z = 0.0);
+
+[native] bool FCNPC_EnterVehicle(int npcid, int vehicleid, int seatid, int type = FCNPC_MOVE_TYPE_WALK);
+[native] bool FCNPC_ExitVehicle(int npcid);
+
+[native] bool FCNPC_PutInVehicle(int npcid, int vehicleid, int seatid);
+[native] bool FCNPC_RemoveFromVehicle(int npcid);
+[native] int FCNPC_GetVehicleId(int npcid);
+[native] int FCNPC_GetVehicleSeat(int npcid);
+[native] bool FCNPC_UseVehicleSiren(int npcid, bool use = true);
+[native] bool FCNPC_IsVehicleSirenUsed(int npcid);
+[native] bool FCNPC_SetVehicleHealth(int npcid, float health);
+[native] float FCNPC_GetVehicleHealth(int npcid);
+[native] bool FCNPC_SetVehicleHydraThrusters(int npcid, int direction);
+[native] int FCNPC_GetVehicleHydraThrusters(int npcid);
+[native] bool FCNPC_SetVehicleGearState(int npcid, int gear_state);
+[native] int FCNPC_GetVehicleGearState(int npcid);
+
+[native] bool FCNPC_SetSurfingOffsets(int npcid, float x, float y, float z);
+[native] bool FCNPC_GiveSurfingOffsets(int npcid, float x, float y, float z);
+[native] bool FCNPC_GetSurfingOffsets(int npcid, [out] float x, [out] float y, [out] float z);
+[native] bool FCNPC_SetSurfingVehicle(int npcid, int vehicleid);
+[native] int FCNPC_GetSurfingVehicle(int npcid);
+[native] bool FCNPC_SetSurfingObject(int npcid, int objectid);
+[native] int FCNPC_GetSurfingObject(int npcid);
+[native] bool FCNPC_SetSurfingPlayerObject(int npcid, int objectid);
+[native] int FCNPC_GetSurfingPlayerObject(int npcid);
+[native] bool FCNPC_StopSurfing(int npcid);
+
+[native] bool FCNPC_StartPlayingPlayback(int npcid, string file = "", int recordid = FCNPC_INVALID_RECORD_ID, bool auto_unload = false, float delta_x = 0.0, float delta_y  = 0.0, float delta_z  = 0.0, float delta_qw = 0.0, float delta_qx = 0.0, float delta_qy = 0.0, float delta_qz = 0.0);
+[native] bool FCNPC_StopPlayingPlayback(int npcid);
+[native] bool FCNPC_PausePlayingPlayback(int npcid);
+[native] bool FCNPC_ResumePlayingPlayback(int npcid);
+[native] int FCNPC_LoadPlayingPlayback(string file);
+[native] bool FCNPC_UnloadPlayingPlayback(int recordid);
+[native] bool FCNPC_SetPlayingPlaybackPath(int npcid, string path);
+[native] bool FCNPC_GetPlayingPlaybackPath(int npcid, [out] string path, int size);
+
+[native] bool FCNPC_OpenNode(int nodeid);
+[native] bool FCNPC_CloseNode(int nodeid);
+[native] bool FCNPC_IsNodeOpen(int nodeid);
+[native] int FCNPC_GetNodeType(int nodeid);
+[native] bool FCNPC_SetNodePoint(int nodeid, int pointid);
+[native] bool FCNPC_GetNodePointPosition(int nodeid, [out] float x, [out] float y, [out] float z);
+[native] int FCNPC_GetNodePointCount(int nodeid);
+[native] bool FCNPC_GetNodeInfo(int nodeid, [out] int vehnodes, [out] int pednodes, [out] int navinode);
+[native] bool FCNPC_PlayNode(int npcid, int nodeid, int move_type = FCNPC_MOVE_TYPE_AUTO, float speed = FCNPC_MOVE_SPEED_AUTO, int mode = FCNPC_MOVE_MODE_AUTO, float radius = 0.0, bool set_angle = true);
+[native] bool FCNPC_StopPlayingNode(int npcid);
+[native] bool FCNPC_PausePlayingNode(int npcid);
+[native] bool FCNPC_ResumePlayingNode(int npcid);
+[native] bool FCNPC_IsPlayingNode(int npcid);
+[native] bool FCNPC_IsPlayingNodePaused(int npcid);
+
+[native] int FCNPC_CreateMovePath();
+[native] bool FCNPC_DestroyMovePath(int pathid);
+[native] bool FCNPC_IsValidMovePath(int pathid);
+[native] int FCNPC_AddPointToMovePath(int pathid, float x, float y, float z);
+[native] bool FCNPC_RemovePointFromMovePath(int pathid, int pointid);
+[native] bool FCNPC_IsValidMovePathPoint(int pathid, int pointid);
+[native] bool FCNPC_GetMovePathPoint(int pathid, int pointid, [out] float x, [out] float y, [out] float z);
+[native] int FCNPC_GetNumberMovePathPoint(int pathid);
+[native] bool FCNPC_GoByMovePath(int npcid, int pathid, int pointid = 0, int type = FCNPC_MOVE_TYPE_AUTO, float speed = FCNPC_MOVE_SPEED_AUTO, int mode = FCNPC_MOVE_MODE_AUTO, int pathfinding = FCNPC_MOVE_PATHFINDING_AUTO, float radius = 0.0, bool set_angle = true, float min_distance = 0.0);
+
+[native] bool FCNPC_SetMoveMode(int npcid, int mode);
+[native] int FCNPC_GetMoveMode(int npcid);
+[native] bool FCNPC_SetMinHeightPosCall(int npcid, float height);
+[native] float FCNPC_GetMinHeightPosCall(int npcid);
+
+[native] bool FCNPC_ShowInTabListForPlayer(int npcid, int forplayerid);
+[native] bool FCNPC_HideInTabListForPlayer(int npcid, int forplayerid);

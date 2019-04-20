@@ -50,7 +50,7 @@ jacoco {
 configure<PluginWrapperGeneratorExtension> {
     packageName = "ch.leadrian.samp.kamp.colAndreaswrapper"
     pluginName = "ColAndreas"
-    removePrefix("ColAndreas_")
+    removePrefix("CA_")
     nativeFunctionsCaseFormat = CaseFormat.UPPER_CAMEL
     callbacksCaseFormat = CaseFormat.UPPER_CAMEL
     interfaceDefintionFile(project.projectDir.resolve("src/main/idl/ColAndreas.idl"))

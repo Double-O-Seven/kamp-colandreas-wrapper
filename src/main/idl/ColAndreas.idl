@@ -1,0 +1,45 @@
+// Constants
+
+const int CA_EXTRA_1 = 0;
+const int CA_EXTRA_2 = 1;
+const int CA_EXTRA_3 = 2;
+const int CA_EXTRA_4 = 3;
+const int CA_EXTRA_5 = 4;
+const int CA_EXTRA_6 = 5;
+const int CA_EXTRA_7 = 6;
+const int CA_EXTRA_8 = 7;
+const int CA_EXTRA_9 = 8;
+const int CA_EXTRA_10 = 9;
+
+const int WATER_OBJECT = 20000;
+
+const int OBJECT_TYPE_OBJECT = 0;
+const int OBJECT_TYPE_DYNAMIC = 1;
+
+const int MAX_MULTICAST_SIZE = 99;
+
+// Natives
+
+[native] bool CA_Init();
+[native] bool CA_RemoveBuilding(int modelid, float x, float y, float z, float radius);
+[native] int CA_RayCastLine(float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, [out] float x, [out] float y, [out] float z);
+[native] int CA_RayCastLineID(float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, [out] float x, [out] float y, [out] float z);
+[native] int CA_RayCastLineExtraID(int type, float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, [out] float x, [out] float y, [out] float z);
+// [native] int CA_RayCastMultiLine(float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, float retx[], float rety[], float retz[], float retdist[], int ModelIDs[], int size);
+[native] int CA_RayCastLineAngle(float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, [out] float x, [out] float y, [out] float z, [out] float rx, [out] float ry, [out] float rz);
+[native] int CA_RayCastReflectionVector(float startx, float starty, float startz, float endx, float endy, float endz, [out] float x, [out] float y, [out] float z, [out] float nx, [out] float ny, [out] float nz);
+[native] int CA_RayCastLineNormal(float startx, float starty, float startz, float endx, float endy, float endz, [out] float x, [out] float y, [out] float z, [out] float nx, [out] float ny, [out] float nz);
+[native] bool CA_ContactTest(int modelid, float x, float y, float z, float rx, float ry, float rz);
+[native] void CA_EulerToQuat(float rx, float ry, float rz, [out] float x, [out] float y, [out] float z, [out] float w);
+[native] void CA_QuatToEuler(float x, float y, float z, float w, [out] float rx, [out] float ry, [out] float rz);
+[native] bool CA_GetModelBoundingSphere(int modelid, [out] float offx, [out] float offy, [out] float offz, [out] float radius);
+[native] bool CA_GetModelBoundingBox(int modelid, [out] float minx, [out] float miny, [out] float minz, [out] float maxx, [out] float maxy, [out] float maxz);
+[native] void CA_SetObjectExtraID(int index, int type, int data);
+[native] int CA_GetObjectExtraID(int index, int type);
+[native] int CA_RayCastLineEx(float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, [out] float x, [out] float y, [out] float z, [out] float rx, [out] float ry, [out] float rz, [out] float rw, [out] float cx, [out] float cy, [out] float cz);
+[native] int CA_RayCastLineAngleEx(float StartX, float StartY, float StartZ, float EndX, float EndY, float EndZ, [out] float x, [out] float y, [out] float z, [out] float rx, [out] float ry, [out] float rz, [out] float ocx, [out] float ocy, [out] float ocz, [out] float orx, [out] float ory, [out] float orz);
+[native] int CA_CreateObject(int modelid, float x, float y, float z, float rx, float ry, float rz, bool add = false);
+[native] int CA_DestroyObject(int index);
+[native] int CA_IsValidObject(int index);
+[native] bool CA_SetObjectPos(int index, float x, float y, float z);
+[native] bool CA_SetObjectRot(int index, float rx, float ry, float rz);

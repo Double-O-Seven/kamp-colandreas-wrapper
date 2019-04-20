@@ -48,7 +48,7 @@ jacoco {
 }
 
 configure<PluginWrapperGeneratorExtension> {
-    packageName = "ch.leadrian.samp.kamp.colAndreaswrapper"
+    packageName = "ch.leadrian.samp.kamp.colandreaswrapper"
     pluginName = "ColAndreas"
     removePrefix("CA_")
     nativeFunctionsCaseFormat = CaseFormat.UPPER_CAMEL

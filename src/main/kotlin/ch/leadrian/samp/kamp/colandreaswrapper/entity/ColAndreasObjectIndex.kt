@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.colandreaswrapper.entity.id
+package ch.leadrian.samp.kamp.colandreaswrapper.entity
 
 import ch.leadrian.samp.kamp.core.api.entity.id.EntityId
 

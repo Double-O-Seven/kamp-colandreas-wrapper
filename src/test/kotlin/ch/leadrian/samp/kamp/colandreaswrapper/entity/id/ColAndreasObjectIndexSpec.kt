@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.colandreaswrapper.entity.id
 
+import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectIndex
 import org.assertj.core.api.Assertions
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe

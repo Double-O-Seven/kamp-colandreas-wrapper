@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.colandreaswrapper.entity
 
 import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasNativeFunctions
-import ch.leadrian.samp.kamp.colandreaswrapper.entity.id.ColAndreasObjectIndex
 import ch.leadrian.samp.kamp.core.api.data.MutableVector3D
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf

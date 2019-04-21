@@ -12,7 +12,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal class ColAndreasObjectSpec : Spek({
+internal object ColAndreasObjectSpec : Spek({
     val colAndreasNativeFunctions by memoized { mockk<ColAndreasNativeFunctions>() }
     val colAndreasObjectIndex = ColAndreasObjectIndex.valueOf(69)
     lateinit var colAndreasObject: ColAndreasObject

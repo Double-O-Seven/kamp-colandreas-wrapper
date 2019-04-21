@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.colandreaswrapper.entity
 
 import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasNativeFunctions
+import ch.leadrian.samp.kamp.colandreaswrapper.constant.ExtraId
 import ch.leadrian.samp.kamp.core.api.data.MutableVector3D
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -106,6 +107,39 @@ internal class ColAndreasObjectSpec : Spek({
                     )
                 }
             }
+        }
+    }
+
+    describe("setExtra") {
+        beforeEach {
+            every { colAndreasNativeFunctions.setObjectExtraID(any(), any(), any()) } returns 1
+            colAndreasObject.setExtra(ExtraId.EXTRA_3, 1337)
+        }
+
+        it("should call colAndreasNativeFunctions.setObjectExtraID") {
+            verify {
+                colAndreasNativeFunctions.setObjectExtraID(
+                        index = colAndreasObjectIndex.value,
+                        type = ExtraId.EXTRA_3.value,
+                        data = 1337
+                )
+            }
+        }
+    }
+
+    describe("getExtra") {
+        beforeEach {
+            every {
+                colAndreasNativeFunctions.getObjectExtraID(
+                        index = colAndreasObjectIndex.value,
+                        type = ExtraId.EXTRA_3.value
+                )
+            } returns 1337
+        }
+
+        it("should return data") {
+            assertThat(colAndreasObject.getExtra(ExtraId.EXTRA_3))
+                    .isEqualTo(1337)
         }
     }
 

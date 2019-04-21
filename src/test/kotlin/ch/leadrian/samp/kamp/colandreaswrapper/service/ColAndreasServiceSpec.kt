@@ -4,12 +4,12 @@ import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasConstants
 import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasNativeFunctions
 import ch.leadrian.samp.kamp.colandreaswrapper.MoreColAndreasNativeFunctions
 import ch.leadrian.samp.kamp.colandreaswrapper.constant.ExtraId
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastAngleResult
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastIdResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineAngleResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineIdResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineNormalVectorResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastMultiLineCollision
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastNormalVectorResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastReflectionVectorResult
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastResult
 import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObject
 import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectIndex
 import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectRegistry
@@ -73,7 +73,7 @@ internal object ColAndreasServiceSpec : Spek({
 
     describe("rayCastLine") {
         context("no collision") {
-            lateinit var result: RayCastResult
+            lateinit var result: RayCastLineResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLine(
@@ -93,12 +93,12 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return NoCollision") {
                 assertThat(result)
-                        .isEqualTo(RayCastResult.NoCollision)
+                        .isEqualTo(RayCastLineResult.NoCollision)
             }
         }
 
         context("collision with water") {
-            lateinit var result: RayCastResult
+            lateinit var result: RayCastLineResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLine(
@@ -123,12 +123,12 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return Collision.WithWater") {
                 assertThat(result)
-                        .isEqualTo(RayCastResult.Collision.WithWater(vector3DOf(x = 7f, y = 8f, z = 9f)))
+                        .isEqualTo(RayCastLineResult.Collision.WithWater(vector3DOf(x = 7f, y = 8f, z = 9f)))
             }
         }
 
         context("collision with object") {
-            lateinit var result: RayCastResult
+            lateinit var result: RayCastLineResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLine(
@@ -153,14 +153,14 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return Collision.WithObject") {
                 assertThat(result)
-                        .isEqualTo(RayCastResult.Collision.WithObject(1337, vector3DOf(x = 7f, y = 8f, z = 9f)))
+                        .isEqualTo(RayCastLineResult.Collision.WithObject(1337, vector3DOf(x = 7f, y = 8f, z = 9f)))
             }
         }
     }
 
     describe("rayCastLineId") {
         context("no collision") {
-            lateinit var result: RayCastIdResult
+            lateinit var result: RayCastLineIdResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineID(
@@ -180,12 +180,12 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return NoCollision") {
                 assertThat(result)
-                        .isEqualTo(RayCastIdResult.NoCollision)
+                        .isEqualTo(RayCastLineIdResult.NoCollision)
             }
         }
 
         context("collision with water or object") {
-            lateinit var result: RayCastIdResult
+            lateinit var result: RayCastLineIdResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineID(
@@ -210,7 +210,7 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return Collision.WithObjectOrWater") {
                 assertThat(result)
-                        .isEqualTo(RayCastIdResult.Collision.WithObjectOrWater(vector3DOf(x = 7f, y = 8f, z = 9f)))
+                        .isEqualTo(RayCastLineIdResult.Collision.WithObjectOrWater(vector3DOf(x = 7f, y = 8f, z = 9f)))
             }
         }
 
@@ -220,7 +220,7 @@ internal object ColAndreasServiceSpec : Spek({
                     every { id } returns ColAndreasObjectIndex.valueOf(69)
                 }
             }
-            lateinit var result: RayCastIdResult
+            lateinit var result: RayCastLineIdResult
 
             beforeEach {
                 every {
@@ -248,7 +248,7 @@ internal object ColAndreasServiceSpec : Spek({
             it("should return Collision.WithColAndreasObject") {
                 assertThat(result)
                         .isEqualTo(
-                                RayCastIdResult.Collision.WithColAndreasObject(
+                                RayCastLineIdResult.Collision.WithColAndreasObject(
                                         colAndreasObject,
                                         vector3DOf(x = 7f, y = 8f, z = 9f)
                                 )
@@ -259,7 +259,7 @@ internal object ColAndreasServiceSpec : Spek({
 
     describe("rayCastLineExtraId") {
         context("no collision") {
-            lateinit var result: RayCastIdResult
+            lateinit var result: RayCastLineIdResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineExtraID(
@@ -284,12 +284,12 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return NoCollision") {
                 assertThat(result)
-                        .isEqualTo(RayCastIdResult.NoCollision)
+                        .isEqualTo(RayCastLineIdResult.NoCollision)
             }
         }
 
         context("collision with water or object") {
-            lateinit var result: RayCastIdResult
+            lateinit var result: RayCastLineIdResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineExtraID(
@@ -319,7 +319,7 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return Collision.WithObjectOrWater") {
                 assertThat(result)
-                        .isEqualTo(RayCastIdResult.Collision.WithObjectOrWater(vector3DOf(x = 7f, y = 8f, z = 9f)))
+                        .isEqualTo(RayCastLineIdResult.Collision.WithObjectOrWater(vector3DOf(x = 7f, y = 8f, z = 9f)))
             }
         }
 
@@ -329,7 +329,7 @@ internal object ColAndreasServiceSpec : Spek({
                     every { id } returns ColAndreasObjectIndex.valueOf(69)
                 }
             }
-            lateinit var result: RayCastIdResult
+            lateinit var result: RayCastLineIdResult
 
             beforeEach {
                 every {
@@ -362,7 +362,7 @@ internal object ColAndreasServiceSpec : Spek({
             it("should return Collision.WithColAndreasObject") {
                 assertThat(result)
                         .isEqualTo(
-                                RayCastIdResult.Collision.WithColAndreasObject(
+                                RayCastLineIdResult.Collision.WithColAndreasObject(
                                         colAndreasObject,
                                         vector3DOf(x = 7f, y = 8f, z = 9f)
                                 )
@@ -519,7 +519,7 @@ internal object ColAndreasServiceSpec : Spek({
 
     describe("rayCastLineAngle") {
         context("no collision") {
-            lateinit var result: RayCastAngleResult
+            lateinit var result: RayCastLineAngleResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineAngle(
@@ -542,12 +542,12 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return NoCollision") {
                 assertThat(result)
-                        .isEqualTo(RayCastAngleResult.NoCollision)
+                        .isEqualTo(RayCastLineAngleResult.NoCollision)
             }
         }
 
         context("collision with water") {
-            lateinit var result: RayCastAngleResult
+            lateinit var result: RayCastLineAngleResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineAngle(
@@ -579,7 +579,7 @@ internal object ColAndreasServiceSpec : Spek({
             it("should return Collision.WithWater") {
                 assertThat(result)
                         .isEqualTo(
-                                RayCastAngleResult.Collision.WithWater(
+                                RayCastLineAngleResult.Collision.WithWater(
                                         coordinates = vector3DOf(x = 7f, y = 8f, z = 9f),
                                         rotation = vector3DOf(x = 10f, y = 11f, z = 12f)
                                 )
@@ -588,7 +588,7 @@ internal object ColAndreasServiceSpec : Spek({
         }
 
         context("collision with object") {
-            lateinit var result: RayCastAngleResult
+            lateinit var result: RayCastLineAngleResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineAngle(
@@ -620,7 +620,7 @@ internal object ColAndreasServiceSpec : Spek({
             it("should return Collision.WithObject") {
                 assertThat(result)
                         .isEqualTo(
-                                RayCastAngleResult.Collision.WithObject(
+                                RayCastLineAngleResult.Collision.WithObject(
                                         1337,
                                         coordinates = vector3DOf(x = 7f, y = 8f, z = 9f),
                                         rotation = vector3DOf(x = 10f, y = 11f, z = 12f)
@@ -745,7 +745,7 @@ internal object ColAndreasServiceSpec : Spek({
 
     describe("rayCastLineNormalVector") {
         context("no collision") {
-            lateinit var result: RayCastNormalVectorResult
+            lateinit var result: RayCastLineNormalVectorResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineNormal(
@@ -768,12 +768,12 @@ internal object ColAndreasServiceSpec : Spek({
 
             it("should return NoCollision") {
                 assertThat(result)
-                        .isEqualTo(RayCastNormalVectorResult.NoCollision)
+                        .isEqualTo(RayCastLineNormalVectorResult.NoCollision)
             }
         }
 
         context("collision with water") {
-            lateinit var result: RayCastNormalVectorResult
+            lateinit var result: RayCastLineNormalVectorResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineNormal(
@@ -805,7 +805,7 @@ internal object ColAndreasServiceSpec : Spek({
             it("should return Collision.WithWater") {
                 assertThat(result)
                         .isEqualTo(
-                                RayCastNormalVectorResult.Collision.WithWater(
+                                RayCastLineNormalVectorResult.Collision.WithWater(
                                         coordinates = vector3DOf(x = 7f, y = 8f, z = 9f),
                                         normalVector = vector3DOf(x = 10f, y = 11f, z = 12f)
                                 )
@@ -814,7 +814,7 @@ internal object ColAndreasServiceSpec : Spek({
         }
 
         context("collision with object") {
-            lateinit var result: RayCastNormalVectorResult
+            lateinit var result: RayCastLineNormalVectorResult
             beforeEach {
                 every {
                     colAndreasNativeFunctions.rayCastLineNormal(
@@ -846,7 +846,7 @@ internal object ColAndreasServiceSpec : Spek({
             it("should return Collision.WithObject") {
                 assertThat(result)
                         .isEqualTo(
-                                RayCastNormalVectorResult.Collision.WithObject(
+                                RayCastLineNormalVectorResult.Collision.WithObject(
                                         1337,
                                         coordinates = vector3DOf(x = 7f, y = 8f, z = 9f),
                                         normalVector = vector3DOf(x = 10f, y = 11f, z = 12f)

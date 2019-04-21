@@ -4,17 +4,17 @@ import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasConstants
 import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 
-sealed class RayCastResult {
+sealed class RayCastLineResult {
 
     abstract val value: Int
 
-    object NoCollision : RayCastResult() {
+    object NoCollision : RayCastLineResult() {
 
         override val value: Int = 0
 
     }
 
-    sealed class Collision : RayCastResult() {
+    sealed class Collision : RayCastLineResult() {
 
         abstract val coordinates: Vector3D
 

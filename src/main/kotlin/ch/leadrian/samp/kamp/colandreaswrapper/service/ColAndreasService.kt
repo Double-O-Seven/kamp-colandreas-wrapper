@@ -4,12 +4,12 @@ import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasConstants
 import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasNativeFunctions
 import ch.leadrian.samp.kamp.colandreaswrapper.MoreColAndreasNativeFunctions
 import ch.leadrian.samp.kamp.colandreaswrapper.constant.ExtraId
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastAngleResult
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastIdResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineAngleResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineIdResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineNormalVectorResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastMultiLineCollision
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastNormalVectorResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastReflectionVectorResult
-import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastResult
 import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectRegistry
 import ch.leadrian.samp.kamp.core.api.amx.MutableCellArray
 import ch.leadrian.samp.kamp.core.api.amx.MutableFloatCell
@@ -54,7 +54,7 @@ internal constructor(
         )
     }
 
-    fun rayCastLine(start: Vector3D, end: Vector3D): RayCastResult {
+    fun rayCastLine(start: Vector3D, end: Vector3D): RayCastLineResult {
         val x = MutableFloatCell()
         val y = MutableFloatCell()
         val z = MutableFloatCell()
@@ -70,13 +70,19 @@ internal constructor(
                 z = z
         )
         return when (result) {
-            0 -> RayCastResult.NoCollision
-            ColAndreasConstants.WATER_OBJECT -> RayCastResult.Collision.WithWater(vector3DOf(x.value, y.value, z.value))
-            else -> RayCastResult.Collision.WithObject(result, vector3DOf(x.value, y.value, z.value))
+            0 -> RayCastLineResult.NoCollision
+            ColAndreasConstants.WATER_OBJECT -> RayCastLineResult.Collision.WithWater(
+                    vector3DOf(
+                            x.value,
+                            y.value,
+                            z.value
+                    )
+            )
+            else -> RayCastLineResult.Collision.WithObject(result, vector3DOf(x.value, y.value, z.value))
         }
     }
 
-    fun rayCastLineId(start: Vector3D, end: Vector3D): RayCastIdResult {
+    fun rayCastLineId(start: Vector3D, end: Vector3D): RayCastLineIdResult {
         val x = MutableFloatCell()
         val y = MutableFloatCell()
         val z = MutableFloatCell()
@@ -92,17 +98,20 @@ internal constructor(
                 z = z
         )
         return when (result) {
-            -1 -> RayCastIdResult.Collision.WithObjectOrWater(vector3DOf(x.value, y.value, z.value))
-            0 -> RayCastIdResult.NoCollision
+            -1 -> RayCastLineIdResult.Collision.WithObjectOrWater(vector3DOf(x.value, y.value, z.value))
+            0 -> RayCastLineIdResult.NoCollision
             else -> {
                 val colAndreasObject = colAndreasObjectRegistry[result]
                         ?: throw IllegalStateException("Could not find ColAndreasObject with ID $result")
-                RayCastIdResult.Collision.WithColAndreasObject(colAndreasObject, vector3DOf(x.value, y.value, z.value))
+                RayCastLineIdResult.Collision.WithColAndreasObject(
+                        colAndreasObject,
+                        vector3DOf(x.value, y.value, z.value)
+                )
             }
         }
     }
 
-    fun rayCastLineExtraId(type: ExtraId, start: Vector3D, end: Vector3D): RayCastIdResult {
+    fun rayCastLineExtraId(type: ExtraId, start: Vector3D, end: Vector3D): RayCastLineIdResult {
         val x = MutableFloatCell()
         val y = MutableFloatCell()
         val z = MutableFloatCell()
@@ -119,12 +128,15 @@ internal constructor(
                 z = z
         )
         return when (result) {
-            -1 -> RayCastIdResult.Collision.WithObjectOrWater(vector3DOf(x.value, y.value, z.value))
-            0 -> RayCastIdResult.NoCollision
+            -1 -> RayCastLineIdResult.Collision.WithObjectOrWater(vector3DOf(x.value, y.value, z.value))
+            0 -> RayCastLineIdResult.NoCollision
             else -> {
                 val colAndreasObject = colAndreasObjectRegistry[result]
                         ?: throw IllegalStateException("Could not find ColAndreasObject with ID $result")
-                RayCastIdResult.Collision.WithColAndreasObject(colAndreasObject, vector3DOf(x.value, y.value, z.value))
+                RayCastLineIdResult.Collision.WithColAndreasObject(
+                        colAndreasObject,
+                        vector3DOf(x.value, y.value, z.value)
+                )
             }
         }
     }
@@ -170,7 +182,7 @@ internal constructor(
         }
     }
 
-    fun rayCastLineAngle(start: Vector3D, end: Vector3D): RayCastAngleResult {
+    fun rayCastLineAngle(start: Vector3D, end: Vector3D): RayCastLineAngleResult {
         val x = MutableFloatCell()
         val y = MutableFloatCell()
         val z = MutableFloatCell()
@@ -192,12 +204,12 @@ internal constructor(
                 rz = rz
         )
         return when (result) {
-            0 -> RayCastAngleResult.NoCollision
-            ColAndreasConstants.WATER_OBJECT -> RayCastAngleResult.Collision.WithWater(
+            0 -> RayCastLineAngleResult.NoCollision
+            ColAndreasConstants.WATER_OBJECT -> RayCastLineAngleResult.Collision.WithWater(
                     coordinates = vector3DOf(x.value, y.value, z.value),
                     rotation = vector3DOf(rx.value, ry.value, rz.value)
             )
-            else -> RayCastAngleResult.Collision.WithObject(
+            else -> RayCastLineAngleResult.Collision.WithObject(
                     modelId = result,
                     coordinates = vector3DOf(x.value, y.value, z.value),
                     rotation = vector3DOf(rx.value, ry.value, rz.value)
@@ -240,7 +252,7 @@ internal constructor(
         }
     }
 
-    fun rayCastLineNormalVector(start: Vector3D, end: Vector3D): RayCastNormalVectorResult {
+    fun rayCastLineNormalVector(start: Vector3D, end: Vector3D): RayCastLineNormalVectorResult {
         val x = MutableFloatCell()
         val y = MutableFloatCell()
         val z = MutableFloatCell()
@@ -262,12 +274,12 @@ internal constructor(
                 nz = rz
         )
         return when (result) {
-            0 -> RayCastNormalVectorResult.NoCollision
-            ColAndreasConstants.WATER_OBJECT -> RayCastNormalVectorResult.Collision.WithWater(
+            0 -> RayCastLineNormalVectorResult.NoCollision
+            ColAndreasConstants.WATER_OBJECT -> RayCastLineNormalVectorResult.Collision.WithWater(
                     coordinates = vector3DOf(x.value, y.value, z.value),
                     normalVector = vector3DOf(rx.value, ry.value, rz.value)
             )
-            else -> RayCastNormalVectorResult.Collision.WithObject(
+            else -> RayCastLineNormalVectorResult.Collision.WithObject(
                     modelId = result,
                     coordinates = vector3DOf(x.value, y.value, z.value),
                     normalVector = vector3DOf(rx.value, ry.value, rz.value)

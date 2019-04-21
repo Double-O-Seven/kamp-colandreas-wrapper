@@ -13,8 +13,13 @@ import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastResult
 import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectRegistry
 import ch.leadrian.samp.kamp.core.api.amx.MutableCellArray
 import ch.leadrian.samp.kamp.core.api.amx.MutableFloatCell
+import ch.leadrian.samp.kamp.core.api.data.Box
+import ch.leadrian.samp.kamp.core.api.data.Quaternion
 import ch.leadrian.samp.kamp.core.api.data.Sphere
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.data.boxOf
+import ch.leadrian.samp.kamp.core.api.data.quaternionOf
+import ch.leadrian.samp.kamp.core.api.data.sphereOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -268,5 +273,68 @@ internal constructor(
                     normalVector = vector3DOf(rx.value, ry.value, rz.value)
             )
         }
+    }
+
+    fun contactTest(modelId: Int, start: Vector3D, end: Vector3D): Boolean =
+            nativeFunctions.contactTest(modelId, start.x, start.y, start.z, end.x, end.y, end.z)
+
+    fun eulerToQuaternion(rotation: Vector3D): Quaternion {
+        val x = MutableFloatCell()
+        val y = MutableFloatCell()
+        val z = MutableFloatCell()
+        val w = MutableFloatCell()
+        nativeFunctions.eulerToQuat(rx = rotation.x, ry = rotation.y, rz = rotation.z, x = x, y = y, z = z, w = w)
+        return quaternionOf(x = x.value, y = y.value, z = z.value, w = w.value)
+    }
+
+    fun quaternionToEuler(quaternion: Quaternion): Vector3D {
+        val x = MutableFloatCell()
+        val y = MutableFloatCell()
+        val z = MutableFloatCell()
+        nativeFunctions.quatToEuler(
+                x = quaternion.x,
+                y = quaternion.y,
+                z = quaternion.z,
+                w = quaternion.w,
+                rx = x,
+                ry = y,
+                rz = z
+        )
+        return vector3DOf(x = x.value, y = y.value, z = z.value)
+    }
+
+    fun getModelBoundingSphere(modelId: Int): Sphere {
+        val x = MutableFloatCell()
+        val y = MutableFloatCell()
+        val z = MutableFloatCell()
+        val r = MutableFloatCell()
+        nativeFunctions.getModelBoundingSphere(modelId, x, y, z, r)
+        return sphereOf(x.value, y.value, z.value, r.value)
+    }
+
+    fun getModelBoundingBox(modelId: Int): Box {
+        val minX = MutableFloatCell()
+        val minY = MutableFloatCell()
+        val minZ = MutableFloatCell()
+        val maxX = MutableFloatCell()
+        val maxY = MutableFloatCell()
+        val maxZ = MutableFloatCell()
+        nativeFunctions.getModelBoundingBox(
+                modelid = modelId,
+                minx = minX,
+                miny = minY,
+                minz = minZ,
+                maxx = maxX,
+                maxy = maxY,
+                maxz = maxZ
+        )
+        return boxOf(
+                minX = minX.value,
+                minY = minY.value,
+                minZ = minZ.value,
+                maxX = maxX.value,
+                maxY = maxY.value,
+                maxZ = maxZ.value
+        )
     }
 }

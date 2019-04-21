@@ -15,6 +15,12 @@ import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectIndex
 import ch.leadrian.samp.kamp.colandreaswrapper.entity.ColAndreasObjectRegistry
 import ch.leadrian.samp.kamp.core.api.amx.MutableCellArray
 import ch.leadrian.samp.kamp.core.api.amx.MutableFloatCell
+import ch.leadrian.samp.kamp.core.api.data.Box
+import ch.leadrian.samp.kamp.core.api.data.Quaternion
+import ch.leadrian.samp.kamp.core.api.data.Sphere
+import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.data.boxOf
+import ch.leadrian.samp.kamp.core.api.data.quaternionOf
 import ch.leadrian.samp.kamp.core.api.data.sphereOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import io.mockk.every
@@ -847,6 +853,126 @@ internal object ColAndreasServiceSpec : Spek({
                                 )
                         )
             }
+        }
+    }
+
+    describe("contactTest") {
+        listOf(true, false).forEach { expectedResult ->
+            context("result is $expectedResult") {
+                var result: Boolean? = null
+
+                beforeEach {
+                    every {
+                        colAndreasNativeFunctions.contactTest(1337, 1f, 2f, 3f, 4f, 5f, 6f)
+                    } returns expectedResult
+                    result = colAndreasService.contactTest(1337, vector3DOf(1f, 2f, 3f), vector3DOf(4f, 5f, 6f))
+                }
+
+                it("should return $expectedResult") {
+                    assertThat(result)
+                            .isEqualTo(expectedResult)
+                }
+            }
+        }
+    }
+
+    describe("eulerToQuaternion") {
+        lateinit var quaternion: Quaternion
+
+        beforeEach {
+            every { colAndreasNativeFunctions.eulerToQuat(1f, 2f, 3f, any(), any(), any(), any()) } answers {
+                arg<MutableFloatCell>(3).value = 4f
+                arg<MutableFloatCell>(4).value = 5f
+                arg<MutableFloatCell>(5).value = 6f
+                arg<MutableFloatCell>(6).value = 7f
+                1
+            }
+            quaternion = colAndreasService.eulerToQuaternion(vector3DOf(1f, 2f, 3f))
+        }
+
+        it("should return quaternion") {
+            assertThat(quaternion)
+                    .isEqualTo(quaternionOf(x = 4f, y = 5f, z = 6f, w = 7f))
+        }
+    }
+
+    describe("quaternionToEuler") {
+        lateinit var rotation: Vector3D
+
+        beforeEach {
+            every { colAndreasNativeFunctions.quatToEuler(1f, 2f, 3f, 4f, any(), any(), any()) } answers {
+                arg<MutableFloatCell>(4).value = 5f
+                arg<MutableFloatCell>(5).value = 6f
+                arg<MutableFloatCell>(6).value = 7f
+                1
+            }
+            rotation = colAndreasService.quaternionToEuler(quaternionOf(1f, 2f, 3f, 4f))
+        }
+
+        it("should return quaternion") {
+            assertThat(rotation)
+                    .isEqualTo(vector3DOf(x = 5f, y = 6f, z = 7f))
+        }
+    }
+
+    describe("getModelBoundingSphere") {
+        lateinit var sphere: Sphere
+
+        beforeEach {
+            every { colAndreasNativeFunctions.getModelBoundingSphere(1337, any(), any(), any(), any()) } answers {
+                arg<MutableFloatCell>(1).value = 1f
+                arg<MutableFloatCell>(2).value = 2f
+                arg<MutableFloatCell>(3).value = 3f
+                arg<MutableFloatCell>(4).value = 4f
+                true
+            }
+            sphere = colAndreasService.getModelBoundingSphere(1337)
+        }
+
+        it("should return bounding sphere") {
+            assertThat(sphere)
+                    .isEqualTo(sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f))
+        }
+    }
+
+    describe("getModelBoundingBox") {
+        lateinit var box: Box
+
+        beforeEach {
+            every {
+                colAndreasNativeFunctions.getModelBoundingBox(
+                        1337,
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } answers {
+                arg<MutableFloatCell>(1).value = 1f
+                arg<MutableFloatCell>(2).value = 2f
+                arg<MutableFloatCell>(3).value = 3f
+                arg<MutableFloatCell>(4).value = 4f
+                arg<MutableFloatCell>(5).value = 5f
+                arg<MutableFloatCell>(6).value = 6f
+                true
+            }
+            box = colAndreasService.getModelBoundingBox(1337)
+        }
+
+        it("should return bounding box") {
+            assertThat(box)
+                    .isEqualTo(
+                            boxOf(
+                                    minX = 1f,
+                                    minY = 2f,
+                                    minZ = 3f,
+                                    maxX = 4f,
+                                    maxY = 5f,
+                                    maxZ = 6f
+                            )
+                    )
         }
     }
 })

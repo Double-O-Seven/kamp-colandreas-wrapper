@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.colandreaswrapper.ColAndreasNativeFunctions
 import ch.leadrian.samp.kamp.colandreaswrapper.MoreColAndreasNativeFunctions
 import ch.leadrian.samp.kamp.colandreaswrapper.constant.ExtraId
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineAngleResult
+import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineExtendedResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineIdResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineNormalVectorResult
 import ch.leadrian.samp.kamp.colandreaswrapper.data.RayCastLineResult
@@ -283,6 +284,52 @@ internal constructor(
                     modelId = result,
                     coordinates = vector3DOf(x.value, y.value, z.value),
                     normalVector = vector3DOf(rx.value, ry.value, rz.value)
+            )
+        }
+    }
+
+    fun rayCastLineExtended(start: Vector3D, end: Vector3D): RayCastLineExtendedResult {
+        val x = MutableFloatCell()
+        val y = MutableFloatCell()
+        val z = MutableFloatCell()
+        val rx = MutableFloatCell()
+        val ry = MutableFloatCell()
+        val rz = MutableFloatCell()
+        val rw = MutableFloatCell()
+        val ox = MutableFloatCell()
+        val oy = MutableFloatCell()
+        val oz = MutableFloatCell()
+        val result = nativeFunctions.rayCastLineEx(
+                StartX = start.x,
+                StartY = start.y,
+                StartZ = start.z,
+                EndX = end.x,
+                EndY = end.y,
+                EndZ = end.z,
+                x = x,
+                y = y,
+                z = z,
+                rx = rx,
+                ry = ry,
+                rz = rz,
+                rw = rw,
+                cx = ox,
+                cy = oy,
+                cz = oz
+        )
+
+        return when (result) {
+            0 -> RayCastLineExtendedResult.NoCollision
+            ColAndreasConstants.WATER_OBJECT -> RayCastLineExtendedResult.Collision.WithWater(
+                    collisionCoordinates = vector3DOf(x.value, y.value, z.value),
+                    rotation = quaternionOf(x = rx.value, y = ry.value, z = rz.value, w = rw.value),
+                    objectCoordinates = vector3DOf(ox.value, ox.value, ox.value)
+            )
+            else -> RayCastLineExtendedResult.Collision.WithObject(
+                    modelId = result,
+                    collisionCoordinates = vector3DOf(x.value, y.value, z.value),
+                    rotation = quaternionOf(x = rx.value, y = ry.value, z = rz.value, w = rw.value),
+                    objectCoordinates = vector3DOf(ox.value, ox.value, ox.value)
             )
         }
     }

@@ -1,1 +1,1 @@
-rootProject.name = "kamp-fcnpc-wrapper"
+rootProject.name = "kamp-colandreas-wrapper"

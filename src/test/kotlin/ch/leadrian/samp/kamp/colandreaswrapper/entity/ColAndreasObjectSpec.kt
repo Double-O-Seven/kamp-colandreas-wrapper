@@ -5,7 +5,9 @@ import ch.leadrian.samp.kamp.colandreaswrapper.constant.ExtraId
 import ch.leadrian.samp.kamp.core.api.data.MutableVector3D
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -112,7 +114,7 @@ internal object ColAndreasObjectSpec : Spek({
 
     describe("setExtra") {
         beforeEach {
-            every { colAndreasNativeFunctions.setObjectExtraID(any(), any(), any()) } returns 1
+            every { colAndreasNativeFunctions.setObjectExtraID(any(), any(), any()) } just Runs
             colAndreasObject.setExtra(ExtraId.EXTRA_3, 1337)
         }
 

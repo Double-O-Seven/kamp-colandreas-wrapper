@@ -12,7 +12,7 @@ plugins {
     jacoco
     id("org.jetbrains.dokka") version "0.9.17"
     id("com.palantir.git-version") version "0.12.0-rc2"
-    id("ch.leadrian.samp.kamp.kamp-plugin-wrapper-generator") version "1.0.0-rc2"
+    id("ch.leadrian.samp.kamp.kamp-plugin-wrapper-generator") version "1.0.0-rc3"
 }
 
 repositories {
@@ -104,7 +104,7 @@ pluginWrapperGenerator {
     removePrefix("CA_")
     nativeFunctionsCaseFormat = CaseFormat.UPPER_CAMEL
     callbacksCaseFormat = CaseFormat.UPPER_CAMEL
-    interfaceDefintionFile(project.projectDir.resolve("src/main/idl/ColAndreas.idl"))
+    interfaceDefinitionFile(project.projectDir.resolve("src/main/idl/ColAndreas.idl"))
 }
 
 publishing {

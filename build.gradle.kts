@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    val kampVersion = "1.0.0-rc7"
+    val kampVersion = "1.0.0-rc9"
 
     api(group = "ch.leadrian.samp.kamp", name = "kamp-core", version = kampVersion)
     api(group = "ch.leadrian.samp.kamp", name = "kamp-annotations", version = kampVersion)
